@@ -2,8 +2,17 @@
 layout: table_wrappers
 ---
 
-{%- assign hierarchy = site.html_pages | where_exp:"item", "item.nav_exclude != true" | sort:"title" | sort:"nav_order" | group_by:"parent" -%}
-{%- assign top_nodes = hierarchy | where_exp:"item", "item.name == ''" | map: "items" | first -%}
+{%- assign sorted_pages = site.html_pages | where_exp: "item", "item.nav_exclude != true" | sort:"title" | sort:"nav_order" -%}
+
+{%- assign top_nodes_path = "" | split: "" -%}
+{%- for page in site.html_pages -%}
+  {%- assign page_path = page.path | replace: "index.md", "" -%}
+  {%- assign page_path_split = page_path | split: "/" -%}
+  {%- if page_path_split.size == 1 or page_path_split.size == 2 -%}
+    {%- assign top_nodes_path = top_nodes_path | append: page.path -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign top_nodes = site.html_pages | where_exp: "item", "top_nodes_path contains item.path" | where_exp: "item", "item.nav_exclude != true" | sort: "title" | sort: "nav_order" -%}
 
 <!DOCTYPE html>
 
@@ -55,13 +64,13 @@ layout: table_wrappers
         </div>
         <div class="page">
           {% unless page.url == "/" %}
-            {% if page.parent %}
+            {% unless top_nodes_path contains page.path %}
               <nav class="breadcrumb-nav">
                 <ol class="breadcrumb-nav-list">
                   {%- include crumbs.html nodes=top_nodes -%}
                 </ol>
               </nav>
-            {% endif %}
+            {% endunless %}
           {% endunless %}
           <div id="main-content" class="page-content" role="main">
             {% if site.heading_anchors != false %}
