@@ -1,19 +1,4 @@
-{%- assign active_path = page.path | replace: "index.md", "" -%}
-{%- assign active_path_split = active_path | split: "/" -%}
-{%- assign child_paths = "" | split: "" -%}
-{%- for child in sorted_pages -%}
-  {%- unless child.path == page.path -%}
-    {%- assign child_path = child.path | split: "/" -%}
-    {%- assign child_path_depth = child_path.size | minus: 1 -%}
-    {%- if child_path_depth == active_path_split.size %}
-      {%- if child.path contains active_path -%}
-        {%- assign child_paths = child_paths | append: child.path -%}
-      {%- endif -%}
-    {%- endif -%}
-  {%- endunless -%}
-{%- endfor -%}
-{%- assign tocNodes = sorted_pages | where_exp: "item", "child_paths contains item.path" -%}
-
+{%- assign tocNodes = hierarchy | where_exp:"item", "item.name == page.title" | map: "items" | first -%}
 {%- if tocNodes.size > 0 -%}
   <hr>
   <h2 class="text-delta">Table of contents</h2>

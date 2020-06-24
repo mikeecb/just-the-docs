@@ -1,23 +1,7 @@
 {%- if page.url == include.node.url -%}
   {%- assign active = true -%}
 {%- else -%}
-
-  {%- assign active_path = include.node.path | replace: "index.md", "" -%}
-  {%- assign active_path_split = active_path | split: "/" -%}
-  {%- assign child_paths = "" | split: "" -%}
-  {%- for child in sorted_pages -%}
-    {%- unless child.path == include.node.path -%}
-      {%- assign child_path_split = child.path | split: "/" -%}
-      {%- assign child_path_depth = child_path_split.size | minus: 1 -%}
-      {%- if child_path_depth == active_path_split.size %}
-        {%- if child.path contains active_path -%}
-          {%- assign child_paths = child_paths | append: child.path -%}
-        {%- endif -%}
-      {%- endif -%}
-    {%- endunless -%}
-  {%- endfor -%}
-  {%- assign activityChildren = sorted_pages | where_exp:"item", "child_paths contains item.path" -%}
-
+  {%- assign activityChildren = hierarchy | where_exp:"item", "item.name == include.node.title" | map: "items" | first -%}
   {%- for activityNode in activityChildren -%}
     {%- include active.html node=activityNode -%}
   {%- endfor -%}

@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Typography
+parent: Utilities
 nav_order: 4
 ---
 
