@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Layout
-parent: Utilities
+parent: docs/utilities/utilities.md
 nav_order: 2
 ---
 

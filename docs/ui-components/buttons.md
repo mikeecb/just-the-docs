@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Buttons
-parent: UI Components
+parent: docs/ui-components/ui-components.md
 nav_order: 2
 ---
 
