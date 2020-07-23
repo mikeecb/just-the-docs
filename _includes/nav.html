@@ -6,17 +6,19 @@
         <h4>{{ group.name }}</h4>
       {%- endif -%}
       {%- for node in group.items -%}
-        {%- include active.html node=node -%}
-        <li class="navigation-list-item{% if active %} active{% endif %}">
-          <a href="{{ node.url | absolute_url }}" class="navigation-list-link{% if active %} active{% endif %}">{{ node.title }}</a>
-          {%- if active -%}
-            {%- assign active = false -%}
-            {%- assign children = hierarchy | where_exp:"item", "item.name == node.path" | map: "items" | first -%}
-            {%- if children -%}
-              {%- include nav.html class="-child-list" nodes=children -%}
+        {%- if node.title -%}
+          {%- include active.html node=node -%}
+          <li class="navigation-list-item{% if active %} active{% endif %}">
+            <a href="{{ node.url | absolute_url }}" class="navigation-list-link{% if active %} active{% endif %}">{{ node.title }}</a>
+            {%- if active -%}
+              {%- assign active = false -%}
+              {%- assign children = hierarchy | where_exp:"item", "item.name == node.path" | map: "items" | first -%}
+              {%- if children -%}
+                {%- include nav.html class="-child-list" nodes=children -%}
+              {%- endif -%}
             {%- endif -%}
-          {%- endif -%}
-        </li>
+          </li>
+        {%- endif -%}
       {%- endfor -%}
     {%- endfor -%}
   </ul>
